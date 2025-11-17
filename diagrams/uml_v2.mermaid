@@ -1,0 +1,83 @@
+classDiagram
+    direction LR
+
+    class CoreProcessor
+
+    class MaskingEngine {
+        +process(input: string): ProcessResult
+    }
+
+    class AlgorithmicMatcher {
+        +findMatches(input: string): Span[]
+    }
+
+    class Rule {
+        <<abstract>>
+    }
+
+    class CardRule
+    class PhoneRule
+    class PassportRule
+    class InnRule
+    class OtherRule
+    Rule <|-- CardRule
+    Rule <|-- PhoneRule
+    Rule <|-- PassportRule
+    Rule <|-- InnRule
+    Rule <|-- OtherRule
+
+    class MaskPolicy {
+        <<interface>>
+        +mask(raw: string): string
+    }
+    class KeepTailPolicy
+    class FullBlockPolicy
+    MaskPolicy <|.. KeepTailPolicy
+    MaskPolicy <|.. FullBlockPolicy
+
+    class Specification~string~ {
+        <<interface>>
+        +isSatisfiedBy(value: string): boolean
+    }
+
+    class LLMProvider {
+        <<interface>>
+        +extractSpans(input: string, queries: string[]): Span[]
+    }
+    class OllamaProvider
+    LLMProvider <|.. OllamaProvider
+
+    class Merger {
+        +merge(a: Span[], b: Span[]): Span[]
+    }
+
+    class Repository {
+        <<abstract>>
+        +create<T>(t: T): Id
+        +update(id, patch): void
+        +getById<T>(id: string): T
+    }
+
+    class TransactionsRepository {
+        <<interface>>
+    }
+    class RunsRepository {
+        <<interface>>
+    }
+    class ChangesRepository {
+        <<interface>>
+    }
+
+    Repository <|-- TransactionsRepository
+    Repository <|-- RunsRepository
+    Repository <|-- ChangesRepository
+
+%% Key associations
+    CoreProcessor --> MaskingEngine : uses
+    CoreProcessor --> Repository : persists
+    MaskingEngine --> AlgorithmicMatcher : calls
+    MaskingEngine --> LLMProvider : calls
+    MaskingEngine --> Merger : merges
+    AlgorithmicMatcher --> Rule : uses *
+    Rule --> MaskPolicy : has 1
+    Rule --> Specification~string~ : validates *

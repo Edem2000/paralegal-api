@@ -1,0 +1,42 @@
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant FE as Frontend
+    participant BE as Backend API
+    participant ENG as MaskingEngine (Facade)
+    participant ALG as Algorithm Rules
+    participant LLM as LLM Provider (Adapter)
+    participant MRG as Merger
+    participant DB as MongoDB
+
+
+    U->>FE: Select checkboxes + custom queries
+    U->>FE: Paste input text & click "Process"
+    FE->>BE: POST /transactions {profile, choices, customQueries, inputText}
+
+
+    BE->>DB: insert transaction (status=pending)
+
+
+    BE->>ENG: process(inputText, profile, choices)
+    ENG->>ALG: findMatches(input)
+    ALG-->>ENG: changesA (spans w/ start,end,before,after)
+
+
+    ENG->>LLM: extractSpans(input, customQueries)
+    LLM-->>ENG: changesL (spans + confidence)
+
+
+    ENG->>MRG: merge(changesA, changesL)
+    MRG-->>ENG: changesFinal (non-overlapping)
+
+
+    ENG-->>BE: {finalText, changesFinal, stats}
+
+
+    BE->>DB: insert runs (algorithm, llm) & changes (per-actor)
+    BE->>DB: insert changes (actor=final) + update transaction (status=success)
+
+
+    BE-->>FE: {transactionId, finalText, changesFinal}
+    FE-->>U: Render final text + table of changes

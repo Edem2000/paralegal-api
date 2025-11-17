@@ -1,0 +1,18 @@
+flowchart TD
+A[Start] --> B[Validate payload\nprofile, choices, customQueries, inputText]
+B --> C[Create Transaction pending]
+C --> D[Algorithm pass\nRun RuleSetFactory -> Rules.findMatches]
+C --> E[LLM pass\nAdapter.call -> spans JSON]
+D --> F[Normalize spans\nconvert to global indices]
+E --> F[Normalize spans\nconvert to global indices]
+F --> G[Merge spans\npriorities + tie-breakers]
+G --> H[Resolve overlaps\n should be none after merge]
+H --> I[Assemble finalText\napply replacements once]
+I --> J[Persist runs & changes\nalgorithm/llm/final]
+J --> K{Errors?}
+K -- yes --> L[Mark transaction partial/error\nattach errorMessage]
+K -- no --> M[Mark transaction success]
+L --> N[Respond with finalText if partial + diagnostics]
+M --> O[Respond 'finalText, changes, stats']
+N --> P[End]
+O --> P[End]

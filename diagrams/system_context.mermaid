@@ -1,0 +1,26 @@
+graph LR
+U[User] --- FE[Frontend]
+FE -->|REST| BE[Backend - NestJS/TS]
+BE -->|Facade| ENG[MaskingEngine]
+ENG --> ALG[Algorithmic Rules]
+ENG --> LLM[LLM Provider - Adapter]
+ALG --> MRG[Merger]
+LLM --> MRG[Merger]
+BE --> DB[(MongoDB)]
+
+
+subgraph Persistence
+DB
+end
+
+
+subgraph Processing Core
+ENG
+ALG
+LLM
+MRG
+end
+
+
+classDef core fill:#eef,stroke:#99f,stroke-width:1px;
+class ENG,ALG,LLM,MRG core;

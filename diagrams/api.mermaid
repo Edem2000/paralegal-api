@@ -1,0 +1,9 @@
+graph TD
+    A[POST /transactions] -->|create + process| B{Engine}
+    B --> C[Algorithm Rules]
+    B --> D[LLM Provider]
+    B --> E[Merger]
+    A --> F[(MongoDB)]
+    F --> G[GET /transactions]
+    F --> H[GET /transactions/:id]
+    F --> I[GET /transactions/:id/changes?actor=...]

@@ -1,0 +1,48 @@
+erDiagram
+    TRANSACTIONS ||--o{ RUNS : has
+    TRANSACTIONS ||--o{ CHANGES : has
+
+
+    TRANSACTIONS {
+        ObjectId _id PK
+        date createdAt
+        string profile
+        string[] choices
+        string[] customQueries
+        string inputText
+        string finalText
+        json stats
+        string status
+        string errorMessage
+    }
+
+
+    RUNS {
+ObjectId _id PK
+ObjectId transactionId FK
+string actor
+date startedAt
+date finishedAt
+string model
+string prompt
+json settings
+json summary
+}
+
+
+CHANGES {
+ObjectId _id PK
+ObjectId transactionId FK
+ObjectId runId
+string actor
+string kind
+string before
+string after
+int start
+int end
+string contextBefore
+string contextAfter
+float confidence
+string resolution
+date createdAt
+}

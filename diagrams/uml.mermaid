@@ -1,0 +1,80 @@
+classDiagram
+    Rule <|-- DobRule
+
+
+    class MaskPolicy {
+        <<interface>>
+        +mask(raw: string): string
+    }
+    class KeepTailPolicy
+    class FullBlockPolicy
+    class EmailPolicy
+    class FixedPolicy
+    MaskPolicy <|.. KeepTailPolicy
+    MaskPolicy <|.. FullBlockPolicy
+    MaskPolicy <|.. EmailPolicy
+    MaskPolicy <|.. FixedPolicy
+
+
+    class Specification~T~ {
+        <<interface>>
+        +isSatisfiedBy(value: T): boolean
+    }
+    class LuhnSpec
+    class MinDigitsSpec
+    Specification~string~ <|.. LuhnSpec
+    Specification~string~ <|.. MinDigitsSpec
+
+
+    class ProcessingPipeline {
+        +handle(ctx: PipelineContext): PipelineContext
+        +setNext(next: PipelineStep): PipelineStep
+    }
+    class NormalizeStep
+    class ResolveOverlapsStep
+    class FinalAssembleStep
+    ProcessingPipeline <|-- NormalizeStep
+    ProcessingPipeline <|-- ResolveOverlapsStep
+    ProcessingPipeline <|-- FinalAssembleStep
+
+
+    class Merger {
+        +merge(a: Span[], b: Span[]): Span[]
+        -choose(a: Span, b: Span): Span
+    }
+
+
+    class LLMProvider {
+        <<interface>>
+        +extractSpans(input: string, queries: string[]): Promise~Span[]~
+    }
+    class OpenAIProvider
+    class OllamaProvider
+    LLMProvider <|.. OpenAIProvider
+    LLMProvider <|.. OllamaProvider
+
+
+    class TransactionsRepository {
+        <<interface>>
+        +create(tx: Transaction): Promise~id~
+        +update(id, patch): Promise
+        +findById(id): Promise~Transaction~
+    }
+    class RunsRepository {
+        <<interface>>
+        +insert(run: Run): Promise~id~
+        +listByTransaction(txId): Promise~Run[]~
+    }
+    class ChangesRepository {
+        <<interface>>
+        +bulkInsert(changes: Change[]): Promise
+        +listByActor(txId, actor): Promise~Change[]~
+    }
+
+
+    class MongoTransactionsRepository
+    class MongoRunsRepository
+    class MongoChangesRepository
+    TransactionsRepository <|.. MongoTransactionsRepository
+    RunsRepository <|.. MongoRunsRepository
+    ChangesRepository <|.. MongoChangesRepository
