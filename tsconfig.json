@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "services": ["src/app/services"],
+      "services/*": ["src/app/services/*"],
+      "infrastructure": ["src/infrastructure"],
+      "infrastructure/*": ["src/infrastructure/*"],
+      "domain": ["src/domain"],
+      "domain/*": ["src/domain/*"],
+      "data": ["src/infrastructure/data"],
+      "data/*": ["src/infrastructure/data/*"],
+      "usecases": ["src/app/usecases"],
+      "usecases/*": ["src/app/usecases/*"],
+      "di": ["src/infrastructure/di"],
+      "di/*": ["src/infrastructure/di/*"],
+      "test/*": ["test/*"]
+    }
+  }
+}

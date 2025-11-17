@@ -1,0 +1,46 @@
+import { asUniqueArray, generateSymbols } from 'domain/utils/type-helpers';
+
+export const Symbols = generateSymbols({
+  infrastructure: {
+    db: asUniqueArray(['main', 'idGenerator'] as const),
+    common: asUniqueArray(['logger', 'localization', 'customDate'] as const),
+    storage: asUniqueArray(['asyncStorage'] as const),
+    kafka: asUniqueArray([
+      'kafkaProducer',
+      'kafkaClient',
+      'keyGenerator',
+    ] as const),
+    jwt: asUniqueArray(['jwtService', 'jwtStrategy'] as const),
+    utils: asUniqueArray(['hasher'] as const),
+    providers: asUniqueArray(['currentUser'] as const),
+  },
+  domain: {
+    user: asUniqueArray(['userRepository', 'userService'] as const),
+    currentUser: asUniqueArray(['currentUserRepository', 'currentUserService'] as const),
+    role: asUniqueArray(['roleRepository', 'roleService'] as const),
+    company: asUniqueArray(['companyRepository', 'companyService'] as const),
+    product: asUniqueArray(['productRepository', 'productService'] as const),
+    upload: asUniqueArray(['uploadRepository', 'uploadService'] as const),
+    stats: asUniqueArray(['statsService'] as const),
+    auditLog: asUniqueArray(['auditLogRepository', 'auditLogService', 'logEnricherService'] as const),
+  },
+  usecases: {
+    users: asUniqueArray(['login', 'getMe', 'createUser', 'get', 'getOne', 'deleteUser', 'updateUser', 'assignCompany', 'unassignCompany', 'search', 'changePassword'] as const),
+    companies: asUniqueArray(['create', 'get', 'getOne', 'delete', 'update', 'search'] as const),
+    products: asUniqueArray(['create', 'get', 'getOne', 'delete', 'update', 'search'] as const),
+    uploads: asUniqueArray(['create', 'get', 'getOne', 'delete'] as const),
+    auditLogs: asUniqueArray(['get', 'getOne'] as const),
+  },
+  externalDomain: {
+
+  },
+} as const);
+
+export const CollectionNames = {
+  users: 'users',
+  companies: 'companies',
+  products: 'products',
+  uploads: 'uploads',
+  stateHistory: 'state_history',
+  auditLogs: 'audit_logs',
+};
