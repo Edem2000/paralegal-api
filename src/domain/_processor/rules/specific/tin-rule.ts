@@ -1,7 +1,7 @@
 import {Rule} from "domain/_processor/rules";
 import {RuleKind} from "domain/_processor/rules/kind";
 
-export class InnRule extends Rule {
+export class TinRule extends Rule {
     constructor() {
         super(
             RuleKind.Tin,
