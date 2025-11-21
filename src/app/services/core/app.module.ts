@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MainController } from 'infrastructure/controllers/controller';
-import { AuditLogUsecasesModule } from 'di/common/modules/domain/usecases/audit-logs-usecases-module';
+import { UsecasesModule } from 'di/common/modules/domain/usecases/usecases-module';
 
 @Module({
   imports: [
-    AuditLogUsecasesModule,
+    UsecasesModule,
   ],
   providers: [],
   controllers: [
