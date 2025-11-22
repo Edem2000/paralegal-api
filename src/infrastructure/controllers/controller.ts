@@ -3,6 +3,7 @@ import {Symbols} from "di/common";
 import {ProcessTransactionUsecase} from "usecases/process-transaction-usecase";
 import {ProcessTransactionDto} from "infrastructure/controllers/dtos/transactions/process-transaction-dto";
 import {getExceptionByError} from "infrastructure/controllers/exceptions/exceptions";
+import {ProcessTransactionPresenter} from "infrastructure/controllers/presenters/process-transaction-presenter";
 
 @Controller('api')
 export class MainController {
@@ -76,7 +77,7 @@ export class MainController {
 
             const result = await this.processTransactionUsecase.execute(params);
 
-            return result
+            return ProcessTransactionPresenter.present(result);
         } catch (error) {
             throw getExceptionByError(error);
         }

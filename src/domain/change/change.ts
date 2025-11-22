@@ -20,7 +20,7 @@ export interface ChangeModel extends BaseModel {
 }
 
 export class Change extends BaseEntity<ChangeModel> {
-    public get transactionId(): Identifier | undefined {
+    public get transactionId(): Identifier {
         return this.model.transactionId;
     }
 

@@ -42,7 +42,7 @@ export class MaskerImpl implements Masker {
                 end: span.end,
                 before,
                 after,
-                actor: RunActor.Final,
+                actor: span.actor,
             }));
 
             cursor = span.end;

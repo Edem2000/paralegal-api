@@ -14,13 +14,13 @@ type ProcessTransactionParams = {
     maskingMode: MaskingMode,
 };
 
-type ProcessTransactionResult = {
+export type ProcessTransactionUsecaseResult = {
     finalText: string;
     finalSpans: Span[];
     changes: Change[]
 }
 
-export interface ProcessTransactionUsecase extends Usecase<ProcessTransactionParams, ProcessTransactionResult> {}
+export interface ProcessTransactionUsecase extends Usecase<ProcessTransactionParams, ProcessTransactionUsecaseResult> {}
 
 export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase {
     constructor(
@@ -35,7 +35,7 @@ export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase 
     ) {
     }
 
-    async execute(params: ProcessTransactionParams): Promise<ProcessTransactionResult> {
+    async execute(params: ProcessTransactionParams): Promise<ProcessTransactionUsecaseResult> {
         const {input, choices, customQueries, maskingMode} = params;
 
         const processingConfig = this.processingConfigService.buildConfig(choices, maskingMode, customQueries);
