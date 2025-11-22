@@ -1,7 +1,7 @@
-import { Schema, SchemaDefinition, SchemaDefinitionType, SchemaOptions, Types } from 'mongoose';
+import {Schema, SchemaDefinition, SchemaDefinitionType, SchemaOptions, Types} from 'mongoose';
 
-import type { Identifier } from 'domain/_core';
-import { identifierToObjectId, objectIdToIdentifier } from 'infrastructure/data';
+import type {Identifier} from 'domain/_core';
+import {identifierToObjectId, objectIdToIdentifier} from 'infrastructure/data';
 
 const baseSchemaOptions: SchemaOptions<any> = {
   versionKey: false,

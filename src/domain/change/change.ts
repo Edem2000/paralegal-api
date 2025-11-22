@@ -2,7 +2,7 @@ import {BaseEntity, BaseModel, type Identifier} from "domain/_core";
 import type {RunActor} from "domain/change/types";
 
 export interface ChangeModel extends BaseModel {
-    transactionId?: Identifier;
+    transactionId: Identifier;
     runId?: Identifier;
     actor: RunActor,
     kind: string,

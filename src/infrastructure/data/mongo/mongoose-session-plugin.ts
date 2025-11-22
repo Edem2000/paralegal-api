@@ -1,5 +1,5 @@
-import { ClientSession, Document, Query, Schema } from 'mongoose';
-import { AsyncLocalStorage } from 'async_hooks';
+import {ClientSession, Document, Query, Schema} from 'mongoose';
+import {AsyncLocalStorage} from 'async_hooks';
 
 // Mongoose used to define this before mongoose 6. For backward's compatibility, we will now just define it ourselves.
 export interface HookNextFunction {

@@ -1,12 +1,29 @@
-import * as mongoose from 'mongoose';
+import {TransactionRealm} from "data/mongo/schemas/transaction-schema";
+import {Injectable, OnModuleDestroy} from "@nestjs/common";
+import {ChangeRealm} from "data/mongo/schemas/change-schema";
+import Realm from "realm"
 
-export class Db {
-  private client!: mongoose.Mongoose;
-  constructor() {}
+@Injectable()
+export class RealmService implements OnModuleDestroy {
+    private readonly _realm: Realm;
 
-  public async connect(): Promise<void> {
-    this.client = await mongoose.connect('mongodb://127.0.0.1:27017/test');
-  }
+    constructor() {
+        // Открываем БД сразу, синхронно
+        this._realm = new Realm({
+            path: 'paralegal.realm',
+            schema: [TransactionRealm, ChangeRealm],
+        });
+    }
+
+    get realm(): Realm {
+        return this._realm;
+    }
+
+    onModuleDestroy() {
+        if (this._realm && !this._realm.isClosed) {
+            this._realm.close();
+        }
+    }
 }
 
 export * from './utils/identifier';

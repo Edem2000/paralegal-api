@@ -5,6 +5,7 @@ import {MaskingMode} from "domain/_processor/processing-config";
 import {MaskingEngine} from "domain/_processor";
 import {Change} from "domain/change/change";
 import {Span} from "domain/span/span";
+import {TransactionService} from "domain/transaction/service";
 
 type ProcessTransactionParams = {
     input: string,
@@ -30,6 +31,7 @@ export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase 
         // private auditLogService: AuditLogService,
         private readonly processingConfigService: ProcessingConfigService,
         private readonly maskingEngine: MaskingEngine,
+        private readonly transactionService: TransactionService,
     ) {
     }
 
@@ -38,8 +40,14 @@ export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase 
 
         const processingConfig = this.processingConfigService.buildConfig(choices, maskingMode, customQueries);
 
+        const transaction = this.transactionService.create({
+            inputText: input,
+            choices,
+            customQueries,
+        });
+
         console.log(input, choices, customQueries, processingConfig);
-        const result = await this.maskingEngine.process(input, processingConfig);
+        const result = await this.maskingEngine.process(transaction, processingConfig);
 
         // await this.auditLogService.log({
         //     type: AuditType.ProcessTransaction,

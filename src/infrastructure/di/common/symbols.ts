@@ -2,7 +2,7 @@ import { asUniqueArray, generateSymbols } from 'domain/utils/type-helpers';
 
 export const Symbols = generateSymbols({
   infrastructure: {
-    db: asUniqueArray(['main', 'idGenerator'] as const),
+    db: asUniqueArray(['main', 'idGenerator', 'realm'] as const),
     common: asUniqueArray(['logger', 'localization', 'customDate'] as const),
     storage: asUniqueArray(['asyncStorage'] as const),
     kafka: asUniqueArray([
@@ -15,7 +15,8 @@ export const Symbols = generateSymbols({
     providers: asUniqueArray(['currentUser'] as const),
   },
   domain: {
-    change: asUniqueArray(['service'] as const),
+    change: asUniqueArray(['repository', 'service'] as const),
+    transaction: asUniqueArray(['repository', 'service'] as const),
     rules: asUniqueArray(['common'] as const),
     engines: asUniqueArray(['algorithmic', 'llm', 'merger', 'masker', 'maskingEngine'] as const),
     auditLog: asUniqueArray(['auditLogRepository', 'auditLogService', 'logEnricherService'] as const),

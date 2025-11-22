@@ -3,9 +3,10 @@ import {ProcessingConfig} from "domain/_processor/processing-config";
 import {ChangeService} from "domain/change/service";
 import {Span} from "domain/span/span";
 import {Change} from "domain/change/change";
+import {Transaction} from "domain/transaction/transaction";
 
 export interface MaskingEngine {
-    process(input: string, processingConfig: ProcessingConfig): Promise<MaskResult>;
+    process(transaction: Transaction, processingConfig: ProcessingConfig): Promise<MaskResult>;
 }
 
 export class MaskingEngineImpl implements MaskingEngine {
@@ -18,19 +19,23 @@ export class MaskingEngineImpl implements MaskingEngine {
     ) {
 
     }
-    public async process(input: string, processingConfig: ProcessingConfig): Promise<MaskResult> {
-        const algorithmSpans = this.algorithmicMatcher.findMatches(input, processingConfig);
+    public async process(transaction: Transaction, processingConfig: ProcessingConfig): Promise<MaskResult> {
+        const originalText = transaction.inputText;
+
+        const algorithmSpans = this.algorithmicMatcher.findMatches(originalText, processingConfig);
+
         // const llmSpans = this.llmProvider.findMatches(input, processingConfig);
+
         const finalSpans = this.merger.mergeSpans(algorithmSpans, []);
 
-        const result = this.masker.applyMasking(input, finalSpans, processingConfig)
+        const result = this.masker.applyMasking(originalText, finalSpans, processingConfig)
 
-        const changes = this.changeService.buildChanges(input, result.finalSpans);
+        const changes = this.changeService.buildChanges(transaction, result.finalSpans);
 
 
-        console.log(finalSpans)
+        // console.log(finalSpans)
         console.log(result.finalText)
-        console.log(result.finalSpans)
+        // console.log(result.finalSpans)
 
         console.log(changes)
         return { finalText: result.finalText, finalSpans: result.finalSpans, changes };

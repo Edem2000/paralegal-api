@@ -1,6 +1,6 @@
-import { FilterQuery, SortValues, UpdateQuery } from 'mongoose';
-import { Identifier } from 'domain/_core';
-import { BaseEntity } from 'domain/_core/base-domain/base-entity';
+import {FilterQuery, SortValues, UpdateQuery} from 'mongoose';
+import {Identifier} from 'domain/_core';
+import {BaseEntity} from 'domain/_core/base-domain/base-entity';
 
 // Define the utility type that handles dot notation for nested fields
 export type DotNotation<T> = {

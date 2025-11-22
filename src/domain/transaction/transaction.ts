@@ -6,13 +6,13 @@ export interface TransactionModel extends BaseModel {
     customQueries: string[],
 
     inputText: string,
-    finalText: string,
+    finalText?: string,
     stats: object,
     status: TransactionStatus,
-    errorMessage: string,
+    errorMessage?: string,
 
     requestedAt: Date,
-    processedAt: Date,
+    processedAt?: Date,
     createdAt: Date,
 }
 
@@ -41,7 +41,7 @@ export class Transaction extends BaseEntity<TransactionModel> {
         this.model.inputText = value;
     }
 
-    public get finalText(): string {
+    public get finalText(): string | undefined {
         return this.model.finalText;
     }
 
@@ -65,7 +65,7 @@ export class Transaction extends BaseEntity<TransactionModel> {
         this.model.status = value;
     }
 
-    public get errorMessage(): string {
+    public get errorMessage(): string | undefined {
         return this.model.errorMessage;
     }
 
@@ -81,7 +81,7 @@ export class Transaction extends BaseEntity<TransactionModel> {
         this.model.requestedAt = value;
     }
 
-    public get processedAt(): Date {
+    public get processedAt(): Date | undefined {
         return this.model.processedAt;
     }
 

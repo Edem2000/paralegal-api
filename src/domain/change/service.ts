@@ -1,12 +1,16 @@
 import {Span} from "domain/span/span";
-import {Change} from "domain/change/change";
+import {Change, ChangeModel} from "domain/change/change";
+import {Transaction} from "domain/transaction/transaction";
+import {ChangeRepository} from "domain/change/repository";
 
 export interface ChangeService {
-    buildChanges(originalText: string, spans: Span[]): Change[];
+    buildChanges(transaction: Transaction, spans: Span[]): Change[];
 }
 
 export class ChangeServiceImpl implements ChangeService {
-    public buildChanges(originalText: string, spans: Span[]): Change[] {
+    constructor(private readonly repository: ChangeRepository) {}
+    public buildChanges(transaction: Transaction, spans: Span[]): Change[] {
+        const originalText = transaction.inputText;
         return spans.map((span) => {
             const { before: contextBefore, after: contextAfter } = this.extractContext(
                 originalText,
@@ -15,20 +19,31 @@ export class ChangeServiceImpl implements ChangeService {
                 30,
             );
 
-            return new Change({
+            return this.create({
+                transactionId: transaction.id,
                 actor: span.actor,
                 kind: span.kind,
-                before: span.before,        // оригинальный фрагмент
-                after: span.after,          // замаскированный фрагмент
+                before: span.before,
+                after: span.after,
                 start: span.start,
                 end: span.end,
                 contextBefore,
                 contextAfter,
                 confidence: span.confidence || 1,
                 resolution: 'applied',
-                createdAt: new Date(),
             });
         });
+    }
+
+    public create(data: Omit<ChangeModel, "createdAt">): Change {
+        const change = new Change({
+            ...data,
+            createdAt: new Date(),
+        });
+
+        this.repository.create(change);
+
+        return change;
     }
 
     private extractContext(

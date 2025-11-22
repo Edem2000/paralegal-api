@@ -1,5 +1,5 @@
-import { Types } from 'mongoose';
-import { EntityId, Identifier } from 'domain/_core';
+import {Types} from 'mongoose';
+import {EntityId, Identifier} from 'domain/_core';
 
 export const isValid = (id: string | number | Types.ObjectId): boolean =>
   Types.ObjectId.isValid(id);
