@@ -3,6 +3,8 @@ import { MongooseModule } from 'infrastructure/di/common/modules/infrastructure/
 import { AppModule } from 'services/core/app.module';
 
 @Module({
-  imports: [ MongooseModule, AppModule],
+  imports: [
+      // MongooseModule,
+      AppModule],
 })
 export class CoreContainer {}
