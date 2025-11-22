@@ -2,7 +2,7 @@ import type {MaskPolicy} from "domain/_processor/policies/mask-policy";
 
 export class KeepTailPolicy implements MaskPolicy {
     constructor(
-        private readonly tailLength: number = 4,
+        private readonly tailLength: number = 2,
         private readonly maskChar: string = '*',
     ) {}
 

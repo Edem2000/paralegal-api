@@ -16,7 +16,7 @@ export const Symbols = generateSymbols({
   },
   domain: {
     rules: asUniqueArray(['common'] as const),
-    engines: asUniqueArray(['algorithmic', 'llm', 'merger', 'masking'] as const),
+    engines: asUniqueArray(['algorithmic', 'llm', 'merger', 'masker', 'maskingEngine'] as const),
     auditLog: asUniqueArray(['auditLogRepository', 'auditLogService', 'logEnricherService'] as const),
     utils: asUniqueArray(['processingConfig'] as const),
   },

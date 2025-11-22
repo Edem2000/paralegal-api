@@ -27,7 +27,7 @@ import {UtilsModule} from "di/common/modules/domain/services/utils-module";
           },
           inject: [
               Symbols.domain.utils.processingConfig,
-              Symbols.domain.engines.masking,
+              Symbols.domain.engines.maskingEngine,
           ],
       },
 
