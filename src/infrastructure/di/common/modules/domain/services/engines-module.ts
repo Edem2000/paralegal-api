@@ -11,9 +11,11 @@ import {
     MergerImpl
 } from "domain/_processor";
 import {RulePriority} from "domain/_processor/rules/priority";
+import {ChangeModule} from "di/common/modules/domain/entities/change-module";
+import {ChangeService} from "domain/change/service";
 
 @Module({
-    imports: [RulesModule],
+    imports: [RulesModule, ChangeModule],
     providers: [
         {
             provide: Symbols.domain.engines.algorithmic,
@@ -44,13 +46,15 @@ import {RulePriority} from "domain/_processor/rules/priority";
                 algorithmMatcher: AlgorithmicMatcher,
                 merger: Merger,
                 masker: Masker,
+                changeService: ChangeService,
                 ): MaskingEngine => {
-                return new MaskingEngineImpl(algorithmMatcher, merger, masker);
+                return new MaskingEngineImpl(algorithmMatcher, merger, masker, changeService);
             },
             inject: [
                 Symbols.domain.engines.algorithmic,
                 Symbols.domain.engines.merger,
                 Symbols.domain.engines.masker,
+                Symbols.domain.change.service,
             ],
         },
 

@@ -3,6 +3,8 @@ import {ProcessingConfigService} from "domain/_processor/processing-config/servi
 import {RuleKind} from "domain/_processor/rules";
 import {MaskingMode} from "domain/_processor/processing-config";
 import {MaskingEngine} from "domain/_processor";
+import {Change} from "domain/change/change";
+import {Span} from "domain/span/span";
 
 type ProcessTransactionParams = {
     input: string,
@@ -12,7 +14,9 @@ type ProcessTransactionParams = {
 };
 
 type ProcessTransactionResult = {
-
+    finalText: string;
+    finalSpans: Span[];
+    changes: Change[]
 }
 
 export interface ProcessTransactionUsecase extends Usecase<ProcessTransactionParams, ProcessTransactionResult> {}
@@ -35,7 +39,7 @@ export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase 
         const processingConfig = this.processingConfigService.buildConfig(choices, maskingMode, customQueries);
 
         console.log(input, choices, customQueries, processingConfig);
-        await this.maskingEngine.process(input, processingConfig);
+        const result = await this.maskingEngine.process(input, processingConfig);
 
         // await this.auditLogService.log({
         //     type: AuditType.ProcessTransaction,
@@ -48,6 +52,6 @@ export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase 
 
         // console.log(`Created company ${company.id}`);
         //
-        return { };
+        return result;
     }
 }

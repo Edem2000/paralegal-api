@@ -64,7 +64,7 @@ export class MainController {
 
     @HttpCode(HttpStatus.OK)
     @Post('/transactions')
-    public async createTransaction(@Body() dto: ProcessTransactionDto): Promise<void> {
+    public async createTransaction(@Body() dto: ProcessTransactionDto): Promise<any> {
         try {
             const params = {
                 input: dto.inputText,
@@ -76,6 +76,7 @@ export class MainController {
 
             const result = await this.processTransactionUsecase.execute(params);
 
+            return result
         } catch (error) {
             throw getExceptionByError(error);
         }

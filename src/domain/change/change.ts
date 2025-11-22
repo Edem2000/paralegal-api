@@ -2,8 +2,8 @@ import {BaseEntity, BaseModel, type Identifier} from "domain/_core";
 import type {RunActor} from "domain/change/types";
 
 export interface ChangeModel extends BaseModel {
-    transactionId: Identifier;
-    runId: Identifier;
+    transactionId?: Identifier;
+    runId?: Identifier;
     actor: RunActor,
     kind: string,
     before: string,
@@ -20,7 +20,7 @@ export interface ChangeModel extends BaseModel {
 }
 
 export class Change extends BaseEntity<ChangeModel> {
-    public get transactionId(): Identifier {
+    public get transactionId(): Identifier | undefined {
         return this.model.transactionId;
     }
 
@@ -28,7 +28,7 @@ export class Change extends BaseEntity<ChangeModel> {
         this.model.transactionId = value;
     }
 
-    public get runId(): Identifier {
+    public get runId(): Identifier | undefined {
         return this.model.runId;
     }
 

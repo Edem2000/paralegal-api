@@ -15,13 +15,14 @@ export const Symbols = generateSymbols({
     providers: asUniqueArray(['currentUser'] as const),
   },
   domain: {
+    change: asUniqueArray(['service'] as const),
     rules: asUniqueArray(['common'] as const),
     engines: asUniqueArray(['algorithmic', 'llm', 'merger', 'masker', 'maskingEngine'] as const),
     auditLog: asUniqueArray(['auditLogRepository', 'auditLogService', 'logEnricherService'] as const),
     utils: asUniqueArray(['processingConfig'] as const),
   },
   usecases: {
-      transactions: asUniqueArray(['process'] as const),
+    transactions: asUniqueArray(['process'] as const),
     users: asUniqueArray(['login', 'getMe', 'createUser', 'get', 'getOne', 'deleteUser', 'updateUser', 'assignCompany', 'unassignCompany', 'search', 'changePassword'] as const),
     companies: asUniqueArray(['create', 'get', 'getOne', 'delete', 'update', 'search'] as const),
     products: asUniqueArray(['create', 'get', 'getOne', 'delete', 'update', 'search'] as const),
