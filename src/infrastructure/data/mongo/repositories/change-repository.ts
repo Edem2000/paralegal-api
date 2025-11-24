@@ -3,13 +3,15 @@ import {RealmService} from "data/mongo";
 import {BSON} from "realm";
 import {ChangeRepository} from "domain/change/repository";
 import {Change} from "domain/change/change";
-import {EntityId} from "domain/_core";
+import {EntityId, Identifier} from "domain/_core";
+import {ChangeRealm} from "data/mongo/schemas/change-schema";
+import {RunActor} from "domain/change/types";
 
 @Injectable()
 export class ChangeRepositoryImpl implements ChangeRepository {
     constructor(private readonly realmService: RealmService) {}
 
-    create(change: Change): Change {
+    public create(change: Change): Change {
         const realm = this.realmService.realm;
 
         let id: BSON.ObjectId = new BSON.ObjectId();
@@ -34,5 +36,38 @@ export class ChangeRepositoryImpl implements ChangeRepository {
         });
 
         return change;
+    }
+
+    public getByTransactionId(transactionId: Identifier): Change[] {
+        const realm = this.realmService.realm;
+
+        const oid = new BSON.ObjectId(transactionId.toString());
+
+        const results = realm
+            .objects<ChangeRealm>(ChangeRealm.schema.name)
+            .filtered('transactionId == $0', oid)
+            .sorted('start');
+
+        return results.map(this.mapChangeRealmToEntity);
+    }
+
+    private mapChangeRealmToEntity(doc: ChangeRealm): Change {
+        return new Change({
+            id: doc.id,
+            createdAt: doc.createdAt,
+
+            transactionId: new EntityId(doc.transactionId.toString()),
+
+            actor: doc.actor as RunActor,
+            kind: doc.kind,
+            before: doc.before,
+            after: doc.after,
+            start: doc.start,
+            end: doc.end,
+            contextBefore: doc.contextBefore,
+            contextAfter: doc.contextAfter,
+            confidence: doc.confidence,
+            resolution: doc.resolution,
+        });
     }
 }

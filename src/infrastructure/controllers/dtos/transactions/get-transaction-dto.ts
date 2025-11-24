@@ -1,14 +1,8 @@
-import {IsNumber, Max, Min} from 'class-validator';
-import {Type} from "class-transformer";
+import {IsMongoId, IsString} from "class-validator";
+import {HexString} from "domain/_core";
 
-export class GetTransactionsDto {
-    @Type(() => Number)
-    @IsNumber()
-    page: number = 1;
-
-    @Type(() => Number)
-    @IsNumber()
-    @Min(1)
-    @Max(100)
-    limit: number = 20;
+export class GetTransactionDto {
+    @IsString()
+    @IsMongoId()
+    id: HexString;
 }

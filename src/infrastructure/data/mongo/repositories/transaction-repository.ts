@@ -5,12 +5,13 @@ import {TransactionRealm} from "data/mongo/schemas/transaction-schema";
 import {TransactionStatus} from "domain/transaction/transaction-state";
 import {TransactionRepository} from "domain/transaction/repository";
 import {Transaction} from "domain/transaction/transaction";
-import {EntityId} from "domain/_core";
+import {EntityId, Identifier} from "domain/_core";
 import {GetPaginatedResult} from "domain/transaction/types";
 
 @Injectable()
 export class TransactionRepositoryImpl implements TransactionRepository {
-    constructor(private readonly realmService: RealmService) {}
+    constructor(private readonly realmService: RealmService) {
+    }
 
     create(transaction: Transaction): Transaction {
         const realm = this.realmService.realm;
@@ -35,35 +36,23 @@ export class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     public get(page: number, limit: number): GetPaginatedResult {
-            const realm = this.realmService.realm;
+        const realm = this.realmService.realm;
 
-            const safePage = Math.max(1, Math.floor(page || 1));
-            const safeLimit = Math.max(1, Math.floor(limit || 10));
+        const safePage = Math.max(1, Math.floor(page || 1));
+        const safeLimit = Math.max(1, Math.floor(limit || 10));
 
-            const all = realm
-                .objects<TransactionRealm>(TransactionRealm.schema.name)
-                .sorted('createdAt', true);
+        const all = realm
+            .objects<TransactionRealm>(TransactionRealm.schema.name)
+            .sorted('createdAt', true);
 
-            const total = all.length;
-            const pages = Math.max(1, Math.ceil(total / safeLimit));
-            const offset = (safePage - 1) * safeLimit;
+        const total = all.length;
+        const pages = Math.max(1, Math.ceil(total / safeLimit));
+        const offset = (safePage - 1) * safeLimit;
 
-            // Если offset вышел за пределы — вернём пустой массив, но с корректными метаданными
-            if (offset >= total) {
-                return {
-                    transactions: [],
-                    total,
-                    page: safePage,
-                    limit: safeLimit,
-                    pages,
-                };
-            }
-
-            const slice = all.slice(offset, offset + safeLimit);
-            const transactions = slice.map((doc) => this.mapTransactionRealmToEntity(doc));
-
+        // Если offset вышел за пределы — вернём пустой массив, но с корректными метаданными
+        if (offset >= total) {
             return {
-                transactions,
+                transactions: [],
                 total,
                 page: safePage,
                 limit: safeLimit,
@@ -71,6 +60,28 @@ export class TransactionRepositoryImpl implements TransactionRepository {
             };
         }
 
+        const slice = all.slice(offset, offset + safeLimit);
+        const transactions = slice.map((doc) => this.mapTransactionRealmToEntity(doc));
+
+        return {
+            transactions,
+            total,
+            page: safePage,
+            limit: safeLimit,
+            pages,
+        };
+    }
+
+    public getById(id: Identifier | string): Transaction | null {
+        const realm = this.realmService.realm;
+
+        const oid = new BSON.ObjectId(id.toString());
+
+        const doc = realm.objectForPrimaryKey(TransactionRealm, oid);
+        if (!doc) return null;
+
+        return this.mapTransactionRealmToEntity(doc);
+    }
 
     markSuccess(params: {
         id: BSON.ObjectId;

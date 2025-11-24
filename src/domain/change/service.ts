@@ -2,9 +2,11 @@ import {Span} from "domain/span/span";
 import {Change, ChangeModel} from "domain/change/change";
 import {Transaction} from "domain/transaction/transaction";
 import {ChangeRepository} from "domain/change/repository";
+import {Identifier} from "domain/_core";
 
 export interface ChangeService {
     buildChanges(transaction: Transaction, spans: Span[]): Change[];
+    getByTransactionId(transactionId: Identifier): Change[];
 }
 
 export class ChangeServiceImpl implements ChangeService {
@@ -44,6 +46,10 @@ export class ChangeServiceImpl implements ChangeService {
         this.repository.create(change);
 
         return change;
+    }
+
+    public getByTransactionId(transactionId: Identifier): Change[] {
+        return this.repository.getByTransactionId(transactionId);
     }
 
     private extractContext(

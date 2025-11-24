@@ -1,4 +1,4 @@
-import {Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, Query} from '@nestjs/common';
+import {Body, Controller, Get, HttpCode, HttpStatus, Inject, Param, Post, Query} from '@nestjs/common';
 import {Symbols} from "di/common";
 import {ProcessTransactionUsecase} from "usecases/process-transaction-usecase";
 import {ProcessTransactionDto} from "infrastructure/controllers/dtos/transactions/process-transaction-dto";
@@ -7,12 +7,19 @@ import {
     ProcessTransactionPresenter,
     ProcessTransactionResponseDto
 } from "infrastructure/controllers/presenters/process-transaction-presenter";
-import {GetTransactionsDto} from "infrastructure/controllers/dtos/transactions/get-transaction-dto";
+import {GetTransactionsDto} from "infrastructure/controllers/dtos/transactions/get-transactions-dto";
 import {GetTransactionsUsecase} from "usecases/get-transactions-usecase";
 import {
     GetTransactionsPresenter,
     GetTransactionsResponseDto
 } from "infrastructure/controllers/presenters/get-transactions-presenter";
+import {GetTransactionDto} from "infrastructure/controllers/dtos/transactions/get-transaction-dto";
+import {GetTransactionUsecase} from "usecases/get-transaction-usecase";
+import {EntityId} from "domain/_core";
+import {
+    GetTransactionPresenter,
+    GetTransactionResponseDto
+} from "infrastructure/controllers/presenters/get-transaction-presenter";
 
 @Controller('api')
 export class MainController {
@@ -21,6 +28,8 @@ export class MainController {
       private readonly processTransactionUsecase: ProcessTransactionUsecase,
       @Inject(Symbols.usecases.transactions.get)
       private readonly getTransactionsUsecase: GetTransactionsUsecase,
+      @Inject(Symbols.usecases.transactions.getOne)
+      private readonly getTransactionUsecase: GetTransactionUsecase,
   ) {}
 
     @HttpCode(HttpStatus.OK)
@@ -59,19 +68,17 @@ export class MainController {
 
     @HttpCode(HttpStatus.OK)
     @Get('/transactions/:id')
-    public async getTransaction(): Promise<void> {
-        // try {
-        //     const params = {
-        //         page: query.page,
-        //         limit: query.limit,
-        //         query: query.query,
-        //     };
-        //
-        //     const { users, page, limit, total } = await this.searchUsersUsecase.execute(params);
-        //
-        // } catch (error) {
-        //     throw getExceptionByError(error);
-        // }
+    public async getTransaction(@Param() params: GetTransactionDto): Promise<GetTransactionResponseDto> {
+        try {
+
+            const id = new EntityId(params.id)
+
+            const data = await this.getTransactionUsecase.execute({ id });
+
+            return GetTransactionPresenter.present(data);
+        } catch (error) {
+            throw getExceptionByError(error);
+        }
     }
 
     @HttpCode(HttpStatus.OK)
