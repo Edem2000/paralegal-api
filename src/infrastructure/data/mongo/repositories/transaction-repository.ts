@@ -6,6 +6,7 @@ import {TransactionStatus} from "domain/transaction/transaction-state";
 import {TransactionRepository} from "domain/transaction/repository";
 import {Transaction} from "domain/transaction/transaction";
 import {EntityId} from "domain/_core";
+import {GetPaginatedResult} from "domain/transaction/types";
 
 @Injectable()
 export class TransactionRepositoryImpl implements TransactionRepository {
@@ -27,10 +28,49 @@ export class TransactionRepositoryImpl implements TransactionRepository {
                 createdAt: transaction.createdAt,
             });
             transaction.id = new EntityId(id.toString())
+            console.log(obj)
         });
 
-        return transaction
+        return transaction;
     }
+
+    public get(page: number, limit: number): GetPaginatedResult {
+            const realm = this.realmService.realm;
+
+            const safePage = Math.max(1, Math.floor(page || 1));
+            const safeLimit = Math.max(1, Math.floor(limit || 10));
+
+            const all = realm
+                .objects<TransactionRealm>(TransactionRealm.schema.name)
+                .sorted('createdAt', true);
+
+            const total = all.length;
+            const pages = Math.max(1, Math.ceil(total / safeLimit));
+            const offset = (safePage - 1) * safeLimit;
+
+            // Если offset вышел за пределы — вернём пустой массив, но с корректными метаданными
+            if (offset >= total) {
+                return {
+                    transactions: [],
+                    total,
+                    page: safePage,
+                    limit: safeLimit,
+                    pages,
+                };
+            }
+
+            const slice = all.slice(offset, offset + safeLimit);
+            const transactions = slice.map((doc) => this.mapTransactionRealmToEntity(doc));
+
+            return {
+                transactions,
+                total,
+                page: safePage,
+                limit: safeLimit,
+                pages,
+            };
+        }
+
 
     markSuccess(params: {
         id: BSON.ObjectId;
@@ -64,6 +104,27 @@ export class TransactionRepositoryImpl implements TransactionRepository {
             obj.status = TransactionStatus.Failed;
             obj.errorMessage = params.errorMessage;
             obj.processedAt = new Date();
+        });
+    }
+
+    private mapTransactionRealmToEntity(
+        doc: TransactionRealm,
+    ): Transaction {
+        return new Transaction({
+            id: doc.id,
+
+            choices: [...doc.choices],
+            customQueries: [...doc.customQueries],
+
+            inputText: doc.inputText,
+            finalText: doc.finalText,
+            stats: (doc.stats ?? {}) as object,
+            status: doc.status as TransactionStatus,
+            errorMessage: doc.errorMessage,
+
+            requestedAt: doc.requestedAt,
+            processedAt: doc.processedAt,
+            createdAt: doc.createdAt,
         });
     }
 }

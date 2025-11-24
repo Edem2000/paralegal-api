@@ -23,7 +23,7 @@ export const Symbols = generateSymbols({
     utils: asUniqueArray(['processingConfig'] as const),
   },
   usecases: {
-    transactions: asUniqueArray(['process'] as const),
+    transactions: asUniqueArray(['process', 'get'] as const),
     users: asUniqueArray(['login', 'getMe', 'createUser', 'get', 'getOne', 'deleteUser', 'updateUser', 'assignCompany', 'unassignCompany', 'search', 'changePassword'] as const),
     companies: asUniqueArray(['create', 'get', 'getOne', 'delete', 'update', 'search'] as const),
     products: asUniqueArray(['create', 'get', 'getOne', 'delete', 'update', 'search'] as const),

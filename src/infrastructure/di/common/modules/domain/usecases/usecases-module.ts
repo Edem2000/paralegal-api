@@ -8,6 +8,7 @@ import {EnginesModule} from "di/common/modules/domain/services/engines-module";
 import {UtilsModule} from "di/common/modules/domain/services/utils-module";
 import {TransactionModule} from "di/common/modules/domain/entities/transaction-module";
 import {TransactionService} from "domain/transaction/service";
+import {GetTransactionsUsecase, GetTransactionsUsecaseImpl} from "usecases/get-transactions-usecase";
 
 @Module({
   imports: [
@@ -36,9 +37,22 @@ import {TransactionService} from "domain/transaction/service";
               Symbols.domain.transaction.service,
           ],
       },
+      {
+          provide: Symbols.usecases.transactions.get,
+          useFactory(
+              transactionService: TransactionService,
+          ): GetTransactionsUsecase {
+              return new GetTransactionsUsecaseImpl(
+                  transactionService
+              );
+          },
+          inject: [
+              Symbols.domain.transaction.service,
+          ],
+      },
 
   ],
-  exports: [Symbols.usecases.transactions.process ],
+  exports: [Symbols.usecases.transactions.process, Symbols.usecases.transactions.get, ],
 })
 
 export class UsecasesModule {}

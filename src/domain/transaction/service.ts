@@ -1,10 +1,11 @@
 import {Transaction} from "domain/transaction/transaction";
-import {CreateParams} from "domain/transaction/types";
+import {CreateParams, GetPaginatedResult} from "domain/transaction/types";
 import {TransactionStatus} from "domain/transaction/transaction-state";
 import {TransactionRepository} from "domain/transaction/repository";
 
 export interface TransactionService {
-    create(data: CreateParams): Transaction
+    create(data: CreateParams): Transaction,
+    get(page: number, limit: number): GetPaginatedResult;
 }
 
 export class TransactionServiceImpl implements TransactionService {
@@ -22,5 +23,9 @@ export class TransactionServiceImpl implements TransactionService {
         console.log(this.repository.create(transaction));
 
         return transaction;
+    }
+
+    public get(page: number, limit: number): GetPaginatedResult {
+        return this.repository.get(page, limit);
     }
 }
