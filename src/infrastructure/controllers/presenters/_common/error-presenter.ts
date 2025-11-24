@@ -1,4 +1,4 @@
-import { CustomError } from 'domain/utils/errors';
+import {CustomError} from 'domain/utils/errors';
 
 export class ErrorPresenter {
   static present(error: CustomError){

@@ -1,4 +1,4 @@
-import { IsArray, IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
+import {IsArray, IsEnum, IsOptional, IsString, MinLength} from 'class-validator';
 import {RuleKind} from "domain/_processor/rules";
 import {MaskingMode} from "domain/_processor/processing-config";
 

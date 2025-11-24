@@ -1,8 +1,8 @@
-import { IsEnum, IsIn, IsOptional, IsString } from 'class-validator';
-import { PaginatedDto } from 'infrastructure/controllers/dtos/common/paginated-dto';
-import { Actor, AuditCategory, AuditType, TargetEntity } from 'domain/audit';
-import { Type } from 'class-transformer';
-import { Identifier } from 'domain/_core';
+import {IsEnum, IsOptional, IsString} from 'class-validator';
+import {PaginatedDto} from 'infrastructure/controllers/dtos/common/paginated-dto';
+import {Actor, AuditCategory, AuditType, TargetEntity} from 'domain/audit';
+import {Type} from 'class-transformer';
+import {Identifier} from 'domain/_core';
 
 export class GetAuditLogsDto extends PaginatedDto{
 

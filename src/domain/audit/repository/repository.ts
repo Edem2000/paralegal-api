@@ -1,5 +1,5 @@
-import { Identifier } from 'domain/_core';
-import { AuditLog, AuditLogFilterQuery, AuditLogSortQuery, GetAuditLogsResult } from 'domain/audit';
+import {Identifier} from 'domain/_core';
+import {AuditLog, AuditLogFilterQuery, AuditLogSortQuery, GetAuditLogsResult} from 'domain/audit';
 
 export interface AuditLogRepository {
   create(audit: AuditLog): Promise<AuditLog>;

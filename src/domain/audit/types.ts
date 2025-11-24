@@ -1,4 +1,4 @@
-import { MultiLanguage } from 'domain/_core';
+import {MultiLanguage} from 'domain/_core';
 
 export const AuditCategory = {
   Auth: 'auth',

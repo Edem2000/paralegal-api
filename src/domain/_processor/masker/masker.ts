@@ -1,9 +1,7 @@
-import {Span, SpanModel} from "domain/span/span";
-import {RunActor} from "domain/span/types";
-import {Rule, RuleKind} from "domain/_processor/rules";
+import {Span} from "domain/span/span";
+import {RuleKind} from "domain/_processor/rules";
 import {MaskingMode, ProcessingConfig} from "domain/_processor/processing-config";
 import {FullBlockPolicy, KeepTailPolicy, MaskPolicy, ReadableFullBlockPolicy} from "domain/_processor/policies";
-import {POJOEntity} from "domain/_core";
 import {KeepHeadAndTailPolicy} from "domain/_processor/policies/keep-head-and-tail-policy";
 
 export interface Masker {

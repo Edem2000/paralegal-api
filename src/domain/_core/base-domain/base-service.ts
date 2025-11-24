@@ -1,4 +1,4 @@
-import { EntityType } from 'domain/_core';
+import {EntityType} from 'domain/_core';
 
 export class BaseService {
   private readonly _entityType: EntityType;

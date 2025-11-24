@@ -1,6 +1,6 @@
-import { EntityId, Identifier } from 'domain/_core/identifier';
-import { enumerable } from 'domain/utils/entity';
-import { NoOverlap, RequiredFieldsOnly } from 'domain/utils/type-helpers';
+import {EntityId, Identifier} from 'domain/_core/identifier';
+import {enumerable} from 'domain/utils/entity';
+import {NoOverlap, RequiredFieldsOnly} from 'domain/utils/type-helpers';
 //
 // /*
 //     1. If getter exists we change context to avoid calling properties though this.model in our custom getters or setters, so in your entity class by calling this.property this.model invoked automatically

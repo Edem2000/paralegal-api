@@ -1,5 +1,5 @@
 import {Module} from "@nestjs/common";
-import {CardRule, EmailRule, TinRule, PassportRule, PhoneRule, Rule} from "domain/_processor/rules";
+import {CardRule, EmailRule, PassportRule, PhoneRule, Rule, TinRule} from "domain/_processor/rules";
 import {Symbols} from "di/common";
 
 @Module({

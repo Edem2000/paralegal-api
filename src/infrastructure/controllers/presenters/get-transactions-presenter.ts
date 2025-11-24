@@ -1,5 +1,4 @@
 import {GetTransactionsUsecaseResult} from "usecases/get-transactions-usecase";
-import {ChangePresenter, ChangeResponseDto} from "infrastructure/controllers/presenters/change-presenter";
 import {
     TransactionPresenter,
     TransactionResponseDto

@@ -1,4 +1,4 @@
-import { Specification } from '../specification';
+import {Specification} from '../specification';
 
 export class NotCardLikePhoneSpecification implements Specification<string> {
     isSatisfiedBy(value: string): boolean {

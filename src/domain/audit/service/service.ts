@@ -1,17 +1,16 @@
-import { BaseService, EntityId, Identifier } from 'domain/_core';
+import {BaseService, Context, EntityId, Identifier} from 'domain/_core';
 import {
-  AuditLog,
-  Actor,
-  categoryByType,
-  AuditLogRepository,
-  ActionLogParams,
-  GetAuditLogsParams,
-  GetAuditLogsResult,
-  AuditLogFilterQuery,
-  AuditLogSortQuery,
-  messageByType,
+    ActionLogParams,
+    Actor,
+    AuditLog,
+    AuditLogFilterQuery,
+    AuditLogRepository,
+    AuditLogSortQuery,
+    categoryByType,
+    GetAuditLogsParams,
+    GetAuditLogsResult,
+    messageByType,
 } from 'domain/audit';
-import { Context } from 'domain/_core';
 
 export interface AuditLogService {
   log(params: ActionLogParams, context: Context): Promise<AuditLog>;

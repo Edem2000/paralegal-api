@@ -1,6 +1,4 @@
-import {IsArray, IsEnum, IsNumber, IsOptional, IsString, Max, Min, MinLength} from 'class-validator';
-import {RuleKind} from "domain/_processor/rules";
-import {MaskingMode} from "domain/_processor/processing-config";
+import {IsNumber, Max, Min} from 'class-validator';
 import {Type} from "class-transformer";
 
 export class GetTransactionsDto {

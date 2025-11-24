@@ -1,4 +1,4 @@
-import { asUniqueArray, generateSymbols } from 'domain/utils/type-helpers';
+import {asUniqueArray, generateSymbols} from 'domain/utils/type-helpers';
 
 export const Symbols = generateSymbols({
   infrastructure: {

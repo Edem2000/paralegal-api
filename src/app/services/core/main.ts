@@ -1,8 +1,8 @@
-import { NestFactory } from '@nestjs/core';
-import { CoreContainer } from 'infrastructure/di/containers/core/container';
-import { ValidationPipe } from '@nestjs/common';
-import { config } from 'infrastructure/config/config';
-import { NestExpressApplication } from '@nestjs/platform-express';
+import {NestFactory} from '@nestjs/core';
+import {CoreContainer} from 'infrastructure/di/containers/core/container';
+import {ValidationPipe} from '@nestjs/common';
+import {config} from 'infrastructure/config/config';
+import {NestExpressApplication} from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(CoreContainer);

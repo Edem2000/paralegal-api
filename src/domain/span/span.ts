@@ -1,4 +1,4 @@
-import {BaseEntity, BaseModel, type Identifier} from "domain/_core";
+import {BaseEntity, BaseModel} from "domain/_core";
 import type {RunActor} from "domain/change/types";
 import {RuleKind} from "domain/_processor/rules/kind";
 

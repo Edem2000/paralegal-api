@@ -1,5 +1,5 @@
-import { BaseEntity, BaseModel, Identifier, MultiLanguage } from 'domain/_core';
-import { Actor, AuditCategory, AuditType, TargetEntity } from 'domain/audit';
+import {BaseEntity, BaseModel, Identifier, MultiLanguage} from 'domain/_core';
+import {Actor, AuditCategory, AuditType, TargetEntity} from 'domain/audit';
 
 export interface AuditLogModel extends BaseModel {
   occurredAt: Date,

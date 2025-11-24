@@ -1,13 +1,5 @@
-import { BaseModel, Identifier, MultiLanguage } from 'domain/_core';
-import {
-  Actor,
-  AuditCategory,
-  AuditLog,
-  AuditLogModel,
-  AuditLogSortField,
-  AuditType,
-  TargetEntity,
-} from 'domain/audit';
+import {Identifier, MultiLanguage} from 'domain/_core';
+import {Actor, AuditCategory, AuditLog, AuditLogModel, AuditLogSortField, AuditType, TargetEntity,} from 'domain/audit';
 
 export type CreateAuditLogParams = Omit<AuditLogModel, 'actorType'>;
 

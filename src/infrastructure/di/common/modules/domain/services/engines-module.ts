@@ -4,7 +4,9 @@ import {Rule} from "domain/_processor/rules";
 import {Symbols} from "di/common";
 import {
     AlgorithmicMatcher,
-    AlgorithmicMatcherImpl, Masker, MaskerImpl,
+    AlgorithmicMatcherImpl,
+    Masker,
+    MaskerImpl,
     MaskingEngine,
     MaskingEngineImpl,
     Merger,

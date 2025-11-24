@@ -1,26 +1,26 @@
 import {
-  BadGatewayException,
-  BadRequestException,
-  ConflictException,
-  ForbiddenException,
-  GatewayTimeoutException,
-  GoneException,
-  HttpException,
-  InternalServerErrorException,
-  MethodNotAllowedException,
-  NotAcceptableException,
-  NotFoundException,
-  NotImplementedException,
-  PayloadTooLargeException,
-  PreconditionFailedException,
-  RequestTimeoutException,
-  ServiceUnavailableException,
-  UnauthorizedException,
-  UnprocessableEntityException,
-  UnsupportedMediaTypeException,
+    BadGatewayException,
+    BadRequestException,
+    ConflictException,
+    ForbiddenException,
+    GatewayTimeoutException,
+    GoneException,
+    HttpException,
+    InternalServerErrorException,
+    MethodNotAllowedException,
+    NotAcceptableException,
+    NotFoundException,
+    NotImplementedException,
+    PayloadTooLargeException,
+    PreconditionFailedException,
+    RequestTimeoutException,
+    ServiceUnavailableException,
+    UnauthorizedException,
+    UnprocessableEntityException,
+    UnsupportedMediaTypeException,
 } from '@nestjs/common';
-import { CustomError } from 'domain/utils/errors';
-import { ErrorPresenter } from 'infrastructure/controllers/presenters/_common/error-presenter';
+import {CustomError} from 'domain/utils/errors';
+import {ErrorPresenter} from 'infrastructure/controllers/presenters/_common/error-presenter';
 
 const exceptionMap: Record<number, new (...args: any[]) => HttpException> = {
   400: BadRequestException,

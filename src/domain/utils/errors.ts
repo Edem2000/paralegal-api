@@ -1,5 +1,5 @@
-import { MultiLanguage } from 'domain/_core';
-import { HttpStatus } from '@nestjs/common';
+import {MultiLanguage} from 'domain/_core';
+import {HttpStatus} from '@nestjs/common';
 
 export class CustomError extends Error {
   httpCode: number;
