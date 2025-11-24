@@ -8,6 +8,7 @@ export interface TransactionService {
     create(data: CreateParams): Transaction,
     get(page: number, limit: number): GetPaginatedResult;
     getById(id: Identifier | string): Transaction | null;
+    writeResult(transaction: Transaction): void;
 }
 
 export class TransactionServiceImpl implements TransactionService {
@@ -33,5 +34,9 @@ export class TransactionServiceImpl implements TransactionService {
 
     public getById(id: Identifier | string): Transaction | null {
         return this.repository.getById(id);
+    }
+
+    public writeResult(transaction: Transaction): void {
+        this.repository.writeSuccess(transaction);
     }
 }

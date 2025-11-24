@@ -83,21 +83,19 @@ export class TransactionRepositoryImpl implements TransactionRepository {
         return this.mapTransactionRealmToEntity(doc);
     }
 
-    markSuccess(params: {
-        id: BSON.ObjectId;
-        finalText: string;
-        stats: object;
-    }) {
+    writeSuccess(transaction: Transaction): void {
         const realm = this.realmService.realm;
         realm.write(() => {
+            const oid = new BSON.ObjectId(transaction.id.toString());
+
             const obj = realm.objectForPrimaryKey(
                 TransactionRealm,
-                params.id,
+                oid,
             );
             if (!obj) return;
 
-            obj.finalText = params.finalText;
-            obj.stats = params.stats;
+            obj.finalText = transaction.finalText;
+            obj.stats = transaction.stats;
             obj.status = TransactionStatus.Finished;
             obj.processedAt = new Date();
         });

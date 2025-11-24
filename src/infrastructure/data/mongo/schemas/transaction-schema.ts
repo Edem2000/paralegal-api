@@ -7,7 +7,7 @@ export class TransactionRealm extends Realm.Object<TransactionRealm> {
     customQueries!: string[];
 
     inputText!: string;
-    finalText!: string;
+    finalText?: string;
     stats!: Realm.Mixed;
     status!: string;
     errorMessage!: string;

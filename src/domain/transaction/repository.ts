@@ -6,4 +6,5 @@ export interface TransactionRepository {
     create(data: TransactionModel): Transaction;
     get(page: number, limit: number): GetPaginatedResult;
     getById(id: Identifier | string): Transaction | null;
+    writeSuccess(transaction: Transaction): void;
 }

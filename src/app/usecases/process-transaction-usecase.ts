@@ -24,11 +24,6 @@ export interface ProcessTransactionUsecase extends Usecase<ProcessTransactionPar
 
 export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase {
     constructor(
-        // private companyService: CompanyService,
-        // private userService: UserService,
-        // private roleService: RoleService,
-        // private currentUserService: CurrentUserService,
-        // private auditLogService: AuditLogService,
         private readonly processingConfigService: ProcessingConfigService,
         private readonly maskingEngine: MaskingEngine,
         private readonly transactionService: TransactionService,
@@ -48,6 +43,8 @@ export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase 
 
         console.log(input, choices, customQueries, processingConfig);
         const result = await this.maskingEngine.process(transaction, processingConfig);
+
+        this.transactionService.writeResult(transaction);
 
         // await this.auditLogService.log({
         //     type: AuditType.ProcessTransaction,
