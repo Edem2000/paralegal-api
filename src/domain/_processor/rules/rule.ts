@@ -7,7 +7,7 @@ export abstract class Rule {
     protected constructor(
         public readonly kind: RuleKind,
         protected readonly pattern: RegExp,
-        protected readonly specification: Specification<string> = new TrueSpecification(),
+        protected readonly specifications: Specification<string>[] = [new TrueSpecification()],
     ) {}
 
     findMatches(input: string): Span[] {
@@ -21,8 +21,15 @@ export abstract class Rule {
 
         let match: RegExpExecArray | null;
         while ((match = regexp.exec(input)) !== null) {
+            console.log(match)
             const before = match[0];
-            if (!this.specification.isSatisfiedBy(before)) {
+
+            let specificationResult = true;
+
+            this.specifications.forEach(specification => {
+                specificationResult = specification.isSatisfiedBy(before)
+            })
+            if (!specificationResult) {
                 continue;
             }
 
