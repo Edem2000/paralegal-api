@@ -23,8 +23,6 @@ export const AuditType = {
   ProductUpdate: 'productUpdate',
   ProductDelete: 'productDelete',
 
-  // ...
-
   CompanyCreate: 'companyCreate',
   CompanyUpdate: 'companyUpdate',
   CompanyDelete: 'companyDelete',

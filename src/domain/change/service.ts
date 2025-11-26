@@ -13,7 +13,7 @@ export class ChangeServiceImpl implements ChangeService {
     constructor(private readonly repository: ChangeRepository) {}
     public buildChanges(transaction: Transaction, spans: Span[]): Change[] {
         const originalText = transaction.inputText;
-        const maskedText = transaction.finalText ?? originalText; // на всякий случай
+        const maskedText = transaction.finalText ?? originalText;
         const sortedSpans = spans.sort((a, b) => a.start - b.start);
 
         let offsetDelta = 0;
@@ -93,24 +93,22 @@ export class ChangeServiceImpl implements ChangeService {
         end: number,
         radius: number = 20,
     ): { before: string; after: string } {
+        // 1. Get basic boundaries
         let beforeStart = Math.max(0, start - radius);
-        // const before = input.slice(beforeStart, start);
-
         let afterEnd = Math.min(input.length, end + radius);
-        // const after = input.slice(end, afterEnd);
 
-        // 2. Расширяем left boundary до начала слова
-        // Движемся влево, пока буква/цифра/подчёркивание
+        // 2. Extend left boundary till word beginning
+        // Go left while there is letter, digit, or underscore
         while (beforeStart > 0 && /\w|\p{L}|\p{N}/u.test(input[beforeStart])) {
             beforeStart--;
         }
 
-        // 3. Расширяем right boundary до конца слова
+        // 3. Extend right boundary till word ending
         while (afterEnd < input.length && /\w|\p{L}|\p{N}/u.test(input[afterEnd - 1])) {
             afterEnd++;
         }
 
-        // 4. Формируем итоговые строки
+        // 4. Build final strings
         const before = input.slice(beforeStart, start);
         const after = input.slice(end, afterEnd);
 
