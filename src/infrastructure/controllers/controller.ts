@@ -33,23 +33,6 @@ export class MainController {
   ) {}
 
     @HttpCode(HttpStatus.OK)
-    @Get('/settings')
-    public async getSettings(): Promise<void> {
-        // try {
-        //     const params = {
-        //         page: query.page,
-        //         limit: query.limit,
-        //         query: query.query,
-        //     };
-        //
-        //     const { users, page, limit, total } = await this.searchUsersUsecase.execute(params);
-        //
-        // } catch (error) {
-        //     throw getExceptionByError(error);
-        // }
-    }
-
-    @HttpCode(HttpStatus.OK)
     @Get('/transactions')
     public async getTransactions(@Query() query: GetTransactionsDto): Promise<GetTransactionsResponseDto> {
         try {

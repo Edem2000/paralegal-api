@@ -46,17 +46,6 @@ export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase 
 
         this.transactionService.writeResult(transaction);
 
-        // await this.auditLogService.log({
-        //     type: AuditType.ProcessTransaction,
-        //     actorUserId: currentUser.id,
-        //     targetEntity: TargetEntity.Company,
-        //     targetId: company.id  ,
-        // }, context).catch((e) => {
-        //     console.log("log creation error:", e);
-        // });
-
-        // console.log(`Created company ${company.id}`);
-        //
         return result;
     }
 }

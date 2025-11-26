@@ -28,8 +28,7 @@ export class TransactionRepositoryImpl implements TransactionRepository {
                 requestedAt: transaction.requestedAt,
                 createdAt: transaction.createdAt,
             });
-            transaction.id = new EntityId(id.toString())
-            console.log(obj)
+            transaction.id = new EntityId(id.toString());
         });
 
         return transaction;

@@ -21,7 +21,6 @@ export abstract class Rule {
 
         let match: RegExpExecArray | null;
         while ((match = regexp.exec(input)) !== null) {
-            console.log(match)
             const before = match[0];
 
             let specificationResult = true;

@@ -23,8 +23,6 @@ export class TransactionServiceImpl implements TransactionService {
             createdAt: new Date(),
         });
 
-        console.log(this.repository.create(transaction));
-
         return transaction;
     }
 

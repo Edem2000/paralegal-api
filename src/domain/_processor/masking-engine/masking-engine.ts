@@ -28,23 +28,22 @@ export class MaskingEngineImpl implements MaskingEngine {
 
         const finalSpans = this.merger.mergeSpans(algorithmSpans, []);
 
-        const result = this.masker.applyMasking(originalText, finalSpans, processingConfig)
-
-        const changes = this.changeService.buildChanges(transaction, result.finalSpans);
+        const result = this.masker.applyMasking(originalText, finalSpans, processingConfig);
 
         transaction.finalText = result.finalText;
 
-        // console.log(finalSpans)
-        console.log(result.finalText)
-        // console.log(result.finalSpans)
+        const changes = this.changeService.buildChanges(transaction, result.finalSpans);
 
-        console.log(changes)
+        console.log(result.finalText);
+        console.log(result.finalSpans);
+        console.log(changes);
+
         return { finalText: result.finalText, finalSpans: result.finalSpans, changes };
     }
 }
 
 export type MaskResult = {
-    finalText: string;
-    finalSpans: Span[];
-    changes: Change[]
+    finalText: string,
+    finalSpans: Span[],
+    changes: Change[],
 }

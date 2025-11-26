@@ -1,6 +1,6 @@
 import {TransactionRealm} from "data/mongo/schemas/transaction-schema";
 import {Injectable, OnModuleDestroy} from "@nestjs/common";
-import {ChangeRealm} from "data/mongo/schemas/change-schema";
+import {ChangeRealm, ValueDetails} from "data/mongo/schemas/change-schema";
 import Realm from "realm"
 
 @Injectable()
@@ -11,7 +11,7 @@ export class RealmService implements OnModuleDestroy {
         // Открываем БД сразу, синхронно
         this._realm = new Realm({
             path: 'paralegal.realm',
-            schema: [TransactionRealm, ChangeRealm],
+            schema: [TransactionRealm, ChangeRealm, ValueDetails],
         });
     }
 

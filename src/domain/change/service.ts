@@ -13,12 +13,39 @@ export class ChangeServiceImpl implements ChangeService {
     constructor(private readonly repository: ChangeRepository) {}
     public buildChanges(transaction: Transaction, spans: Span[]): Change[] {
         const originalText = transaction.inputText;
-        return spans.map((span) => {
+        const maskedText = transaction.finalText ?? originalText; // на всякий случай
+        const sortedSpans = spans.sort((a, b) => a.start - b.start);
+
+        let offsetDelta = 0;
+
+        return sortedSpans.map((span) => {
+            const originalLength = span.end - span.start;
+
             const { before: contextBefore, after: contextAfter } = this.extractContext(
                 originalText,
                 span.start,
                 span.end,
-                30,
+                20,
+            );
+
+            const maskedLength = span.after.length;
+
+            // new coordinates in finalText after masking
+            const maskedStart = span.start + offsetDelta;
+            const maskedEnd = maskedStart + maskedLength;
+
+            // after this span text length changed for:
+            offsetDelta += maskedLength - originalLength;
+
+            // calculating resulting context after masking
+            const {
+                before: maskedContextBefore,
+                after: maskedContextAfter,
+            } = this.extractContext(
+                maskedText,
+                maskedStart,
+                maskedEnd,
+                20,
             );
 
             return this.create({
@@ -26,11 +53,19 @@ export class ChangeServiceImpl implements ChangeService {
                 actor: span.actor,
                 kind: span.kind,
                 before: span.before,
+                beforeDetails: {
+                    start: span.start,
+                    end: span.end,
+                    contextBefore: contextBefore,
+                    contextAfter: contextAfter,
+                },
                 after: span.after,
-                start: span.start,
-                end: span.end,
-                contextBefore,
-                contextAfter,
+                afterDetails: {
+                    start: maskedStart,
+                    end: maskedEnd,
+                    contextBefore: maskedContextBefore,
+                    contextAfter: maskedContextAfter,
+                },
                 confidence: span.confidence || 1,
                 resolution: 'applied',
             });
@@ -56,12 +91,27 @@ export class ChangeServiceImpl implements ChangeService {
         input: string,
         start: number,
         end: number,
-        radius: number = 30,
+        radius: number = 20,
     ): { before: string; after: string } {
-        const beforeStart = Math.max(0, start - radius);
-        const before = input.slice(beforeStart, start);
+        let beforeStart = Math.max(0, start - radius);
+        // const before = input.slice(beforeStart, start);
 
-        const afterEnd = Math.min(input.length, end + radius);
+        let afterEnd = Math.min(input.length, end + radius);
+        // const after = input.slice(end, afterEnd);
+
+        // 2. Расширяем left boundary до начала слова
+        // Движемся влево, пока буква/цифра/подчёркивание
+        while (beforeStart > 0 && /\w|\p{L}|\p{N}/u.test(input[beforeStart])) {
+            beforeStart--;
+        }
+
+        // 3. Расширяем right boundary до конца слова
+        while (afterEnd < input.length && /\w|\p{L}|\p{N}/u.test(input[afterEnd - 1])) {
+            afterEnd++;
+        }
+
+        // 4. Формируем итоговые строки
+        const before = input.slice(beforeStart, start);
         const after = input.slice(end, afterEnd);
 
         return { before, after };

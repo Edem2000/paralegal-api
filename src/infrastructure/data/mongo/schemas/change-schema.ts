@@ -8,11 +8,10 @@ export class ChangeRealm extends Realm.Object<ChangeRealm> {
     actor!: string;
     kind!: string;
     before!: string;
+    beforeDetails!: ValueDetails;
+
     after!: string;
-    start!: number;
-    end!: number;
-    contextBefore!: string;
-    contextAfter!: string;
+    afterDetails!: ValueDetails;
 
     confidence!: number;
     resolution!: string;
@@ -37,14 +36,30 @@ export class ChangeRealm extends Realm.Object<ChangeRealm> {
             actor: 'string',
             kind: 'string',
             before: 'string',
-            after: 'string',
-            start: 'int',
-            end: 'int',
-            contextBefore: 'string',
-            contextAfter: 'string',
+            beforeDetails: "ValueDetails",
+            after: "string",
+            afterDetails: "ValueDetails",
             confidence: 'double',
             resolution: 'string',
             createdAt: 'date',
+        },
+    };
+}
+
+export class ValueDetails extends Realm.Object<ValueDetails> {
+    start!: number;
+    end!: number;
+    contextBefore!: string;
+    contextAfter!: string;
+
+    static schema: Realm.ObjectSchema = {
+        name: "ValueDetails",
+        embedded: true, // важно: embedded, а не отдельная таблица
+        properties: {
+            start: "int",
+            end: "int",
+            contextBefore: "string",
+            contextAfter: "string",
         },
     };
 }

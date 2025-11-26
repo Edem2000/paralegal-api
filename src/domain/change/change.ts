@@ -1,17 +1,22 @@
 import {BaseEntity, BaseModel, type Identifier} from "domain/_core";
 import type {RunActor} from "domain/change/types";
 
+type ValueDetails = {
+    start: number,
+    end: number,
+    contextBefore: string,
+    contextAfter: string,
+};
+
 export interface ChangeModel extends BaseModel {
     transactionId: Identifier;
     runId?: Identifier;
     actor: RunActor,
     kind: string,
     before: string,
+    beforeDetails: ValueDetails,
     after: string,
-    start: number,
-    end: number,
-    contextBefore: string,
-    contextAfter: string,
+    afterDetails: ValueDetails,
 
     confidence: number,
     resolution: string,
@@ -60,6 +65,14 @@ export class Change extends BaseEntity<ChangeModel> {
         this.model.before = value;
     }
 
+    public get beforeDetails(): ValueDetails {
+        return this.model.beforeDetails;
+    }
+
+    public set beforeDetails(value: ValueDetails) {
+        this.model.beforeDetails = value;
+    }
+
     public get after(): string {
         return this.model.after;
     }
@@ -68,36 +81,12 @@ export class Change extends BaseEntity<ChangeModel> {
         this.model.after = value;
     }
 
-    public get start(): number {
-        return this.model.start;
+    public get afterDetails(): ValueDetails {
+        return this.model.afterDetails;
     }
 
-    public set start(value: number) {
-        this.model.start = value;
-    }
-
-    public get end(): number {
-        return this.model.end;
-    }
-
-    public set end(value: number) {
-        this.model.end = value;
-    }
-
-    public get contextBefore(): string {
-        return this.model.contextBefore;
-    }
-
-    public set contextBefore(value: string) {
-        this.model.contextBefore = value;
-    }
-
-    public get contextAfter(): string {
-        return this.model.contextAfter;
-    }
-
-    public set contextAfter(value: string) {
-        this.model.contextAfter = value;
+    public set afterDetails(value: ValueDetails) {
+        this.model.afterDetails = value;
     }
 
     public get confidence(): number {
