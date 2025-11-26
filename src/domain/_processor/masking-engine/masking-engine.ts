@@ -1,9 +1,9 @@
-import type {AlgorithmicMatcher, Masker, Merger} from "domain/_processor";
-import {ProcessingConfig} from "domain/_processor/processing-config";
-import {ChangeService} from "domain/change/service";
-import {Span} from "domain/span/span";
-import {Change} from "domain/change/change";
-import {Transaction} from "domain/transaction/transaction";
+import type {AlgorithmicMatcher, LlmProvider, Masker, Merger} from "domain/_processor";
+import type {ProcessingConfig} from "domain/_processor/processing-config";
+import type {ChangeService} from "domain/change/service";
+import type {Span} from "domain/span/span";
+import type {Change} from "domain/change/change";
+import type {Transaction} from "domain/transaction/transaction";
 
 export interface MaskingEngine {
     process(transaction: Transaction, processingConfig: ProcessingConfig): Promise<MaskResult>;
@@ -12,7 +12,7 @@ export interface MaskingEngine {
 export class MaskingEngineImpl implements MaskingEngine {
     constructor(
         private readonly algorithmicMatcher: AlgorithmicMatcher,
-        // private readonly llmProvider: LlmProvider,
+        private readonly llmProvider: LlmProvider,
         private readonly merger: Merger,
         private readonly masker: Masker,
         private readonly changeService: ChangeService,
@@ -24,9 +24,11 @@ export class MaskingEngineImpl implements MaskingEngine {
 
         const algorithmSpans = this.algorithmicMatcher.findMatches(originalText, processingConfig);
 
-        // const llmSpans = this.llmProvider.findMatches(input, processingConfig);
+        const llmSpans = await this.llmProvider.findMatches(originalText, processingConfig);
 
-        const finalSpans = this.merger.mergeSpans(algorithmSpans, []);
+        console.log("llm results", llmSpans)
+
+        const finalSpans = this.merger.mergeSpans(algorithmSpans, llmSpans);
 
         const result = this.masker.applyMasking(originalText, finalSpans, processingConfig);
 

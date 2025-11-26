@@ -4,7 +4,7 @@ import {Rule} from "domain/_processor/rules";
 import {Symbols} from "di/common";
 import {
     AlgorithmicMatcher,
-    AlgorithmicMatcherImpl,
+    AlgorithmicMatcherImpl, LlmProvider,
     Masker,
     MaskerImpl,
     MaskingEngine,
@@ -15,6 +15,7 @@ import {
 import {RulePriority} from "domain/_processor/rules/priority";
 import {ChangeModule} from "di/common/modules/domain/entities/change-module";
 import {ChangeService} from "domain/change/service";
+import {LlmProviderImpl} from "infrastructure/gateways/llm-provider/llm-provider";
 
 @Module({
     imports: [RulesModule, ChangeModule],
@@ -25,6 +26,13 @@ import {ChangeService} from "domain/change/service";
                 return new AlgorithmicMatcherImpl(rules);
             },
             inject: [Symbols.domain.rules.common],
+        },
+        {
+            provide: Symbols.domain.engines.llm,
+            useFactory: (): LlmProvider => {
+                return new LlmProviderImpl();
+            },
+            inject: [],
         },
         {
             provide: Symbols.domain.engines.merger,
@@ -46,29 +54,22 @@ import {ChangeService} from "domain/change/service";
             provide: Symbols.domain.engines.maskingEngine,
             useFactory: (
                 algorithmMatcher: AlgorithmicMatcher,
+                llmProvider: LlmProvider,
                 merger: Merger,
                 masker: Masker,
                 changeService: ChangeService,
                 ): MaskingEngine => {
-                return new MaskingEngineImpl(algorithmMatcher, merger, masker, changeService);
+                return new MaskingEngineImpl(algorithmMatcher, llmProvider, merger, masker, changeService);
             },
             inject: [
                 Symbols.domain.engines.algorithmic,
+                Symbols.domain.engines.llm,
                 Symbols.domain.engines.merger,
                 Symbols.domain.engines.masker,
                 Symbols.domain.change.service,
             ],
         },
-
-        // LlmEngine можно просто как класс, либо тоже через фабрику
-        // {
-        //     provide: LlmEngine,
-        //     useFactory: () => {
-        //         // сюда можно будет передать настройки LLM (endpoint, modelName, ...)
-        //         return new LlmEngine();
-        //     },
-        // },
     ],
-    exports: [Symbols.domain.engines.algorithmic, Symbols.domain.engines.masker, Symbols.domain.engines.maskingEngine],
+    exports: [Symbols.domain.engines.algorithmic, Symbols.domain.engines.llm, Symbols.domain.engines.masker, Symbols.domain.engines.maskingEngine],
 })
 export class EnginesModule {}
