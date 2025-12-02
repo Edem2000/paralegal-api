@@ -4,6 +4,13 @@
   "sourceRoot": "src",
   "entryFile": "app/services/core/main",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "assets": [
+      {
+        "include": "infrastructure/gateways/llm-provider/system_prompt.txt",
+        "outDir": "dist"
+      }
+    ],
+    "watchAssets": true
   }
 }
