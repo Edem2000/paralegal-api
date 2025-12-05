@@ -36,9 +36,9 @@ export class MaskingEngineImpl implements MaskingEngine {
 
         const changes = this.changeService.buildChanges(transaction, result.finalSpans);
 
-        console.log(result.finalText);
-        console.log(result.finalSpans);
-        console.log(changes);
+        // console.log(result.finalText);
+        // console.log(result.finalSpans);
+        // console.log(changes);
 
         return { finalText: result.finalText, finalSpans: result.finalSpans, changes };
     }
