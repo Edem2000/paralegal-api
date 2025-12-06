@@ -21,6 +21,7 @@ export class TransactionRepositoryImpl implements TransactionRepository {
             const obj = realm.create('Transaction', {
                 _id: id,
                 choices: transaction.choices,
+                llmChoices: transaction.llmChoices,
                 customQueries: transaction.customQueries,
                 inputText: transaction.inputText,
                 stats: transaction.stats,
@@ -122,6 +123,7 @@ export class TransactionRepositoryImpl implements TransactionRepository {
             id: doc.id,
 
             choices: [...doc.choices],
+            llmChoices: [...doc.llmChoices],
             customQueries: [...doc.customQueries],
 
             inputText: doc.inputText,
