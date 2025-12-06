@@ -71,6 +71,7 @@ export class MainController {
             const params = {
                 input: dto.inputText,
                 choices: dto.choices,
+                llmChoices: dto.llmChoices,
                 customQueries: dto.customQueries,
                 maskingMode: dto.maskingMode,
                 tailLength: dto.tailLength,

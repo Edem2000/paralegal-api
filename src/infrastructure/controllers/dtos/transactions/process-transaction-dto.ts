@@ -13,6 +13,10 @@ export class ProcessTransactionDto {
 
     @IsArray()
     @IsString({ each: true })
+    llmChoices!: RuleKind[];
+
+    @IsArray()
+    @IsString({ each: true })
     customQueries!: string[];
 
     @IsString()

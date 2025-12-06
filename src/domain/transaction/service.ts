@@ -23,6 +23,8 @@ export class TransactionServiceImpl implements TransactionService {
             createdAt: new Date(),
         });
 
+        this.repository.create(transaction);
+
         return transaction;
     }
 

@@ -10,7 +10,22 @@ type GeneralConfig = {
     connectionString: string,
   },
   jwt: JwtConfig,
+  llm: {
+      provider: LlmProviderOption,
+      geminiApiKey: string,
+      openaiApiKey: string,
+  }
 };
+
+export const LlmProviderOption = {
+    Local: "local",
+    Gemini: "gemini",
+    OpenAI: "openai",
+} as const;
+
+export type LlmProviderOption = (typeof LlmProviderOption)[keyof typeof LlmProviderOption];
+
+const LlmProviderOptions = Object.values(LlmProviderOption);
 
 export type JwtConfig = {
   secret: string,
@@ -30,4 +45,9 @@ export const config: GeneralConfig = {
     refreshTtl: envVars.JWT_REFRESH_TTL || '7d',
     userCacheTtl: +(envVars.USER_CACHE_TTL || 120) // 2 mins in seconds
   },
+  llm: {
+      provider: envVars.LLM_PROVIDER as LlmProviderOption || LlmProviderOption.Local,
+      geminiApiKey: envVars.GEMINI_API_KEY || "",
+      openaiApiKey: envVars.OPENAI_API_KEY || "",
+  }
 };

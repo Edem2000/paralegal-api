@@ -16,6 +16,9 @@ import {RulePriority} from "domain/_processor/rules/priority";
 import {ChangeModule} from "di/common/modules/domain/entities/change-module";
 import {ChangeService} from "domain/change/service";
 import {LlmProviderImpl} from "infrastructure/gateways/llm-provider/llm-provider";
+import {config, LlmProviderOption} from "infrastructure/config/config";
+import {GeminiApiProvider} from "infrastructure/gateways/llm-provider/gemini-api-provider";
+import {OpenaiApiProvider} from "infrastructure/gateways/llm-provider/openai-api-provider";
 
 @Module({
     imports: [RulesModule, ChangeModule],
@@ -30,7 +33,14 @@ import {LlmProviderImpl} from "infrastructure/gateways/llm-provider/llm-provider
         {
             provide: Symbols.domain.engines.llm,
             useFactory: (): LlmProvider => {
-                return new LlmProviderImpl();
+                console.log(config.llm.provider)
+                if (config.llm.provider === LlmProviderOption.Gemini) {
+                    return new GeminiApiProvider({geminiApiKey: config.llm.geminiApiKey})
+                } else if (config.llm.provider === LlmProviderOption.OpenAI) {
+                    return new OpenaiApiProvider({openaiApiKey: config.llm.openaiApiKey})
+                } else {
+                    return new LlmProviderImpl();
+                }
             },
             inject: [],
         },

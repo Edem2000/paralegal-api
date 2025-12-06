@@ -42,6 +42,7 @@ export abstract class Rule {
                 before,
                 after: before,     // real mask is to be added at further steps
                 actor: RunActor.Algorithm,
+                confidence: 2,
             })
 
             spans.push(span);

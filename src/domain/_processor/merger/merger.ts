@@ -1,6 +1,8 @@
 import {Span} from "domain/span/span";
 import {RunActor} from "domain/span/types";
 import {Rule, RuleKind} from "domain/_processor/rules";
+import {MaskingMode, ProcessingConfig} from "domain/_processor/processing-config";
+import {FullBlockPolicy, KeepTailPolicy, MaskPolicy, ReadableFullBlockPolicy} from "domain/_processor/policies";
 
 export interface Merger {
     mergeSpans(algorithmSpans: Span[], llmSpans: Span[]): Span[];
@@ -38,6 +40,7 @@ export class MergerImpl implements Merger {
             }
 
             const winner = this.chooseWinner(s, out[clashIndex]);
+
             out[clashIndex] = winner;
         }
 
@@ -45,20 +48,24 @@ export class MergerImpl implements Merger {
     }
 
     private chooseWinner(a: Span, b: Span): Span {
+        let winner: Span = a;
         const pa = this.rulePriority[a.kind];
         const pb = this.rulePriority[b.kind];
 
-        if (pa !== pb) return pa > pb ? a : b;
+        if (pa !== pb) winner = pa > pb ? a : b;
 
         const lenA = a.end - a.start;
         const lenB = b.end - b.start;
-        if (lenA !== lenB) return lenA > lenB ? a : b;
+        if (lenA !== lenB) winner = lenA > lenB ? a : b;
 
-        if (a.actor !== b.actor) return a.actor === RunActor.Algorithm ? a : b;
+        if (a.actor !== b.actor) winner = a.actor === RunActor.Algorithm ? a : b;
 
         const ca = a.confidence ?? 0;
         const cb = b.confidence ?? 0;
-        return ca >= cb ? a : b;
+
+        if (ca !== cb) winner = ca > cb ? a : b;
+
+        return winner;
     }
 
     private isOverlap(a: Span, b: Span): boolean {

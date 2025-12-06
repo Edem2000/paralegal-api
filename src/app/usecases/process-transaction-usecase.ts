@@ -10,6 +10,7 @@ import {TransactionService} from "domain/transaction/service";
 type ProcessTransactionParams = {
     input: string,
     choices: RuleKind[],
+    llmChoices: RuleKind[],
     customQueries: string[],
     maskingMode: MaskingMode,
 };
@@ -31,9 +32,9 @@ export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase 
     }
 
     async execute(params: ProcessTransactionParams): Promise<ProcessTransactionUsecaseResult> {
-        const {input, choices, customQueries, maskingMode} = params;
+        const {input, choices, llmChoices, customQueries, maskingMode} = params;
 
-        const processingConfig = this.processingConfigService.buildConfig(choices, maskingMode, customQueries);
+        const processingConfig = this.processingConfigService.buildConfig(choices, llmChoices, maskingMode, customQueries);
 
         const transaction = this.transactionService.create({
             inputText: input,
@@ -41,7 +42,6 @@ export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase 
             customQueries,
         });
 
-        console.log(input, choices, customQueries, processingConfig);
         const result = await this.maskingEngine.process(transaction, processingConfig);
 
         this.transactionService.writeResult(transaction);
