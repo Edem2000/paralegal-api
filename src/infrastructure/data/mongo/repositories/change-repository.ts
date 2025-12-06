@@ -54,7 +54,7 @@ export class ChangeRepositoryImpl implements ChangeRepository {
         const results = realm
             .objects<ChangeRealm>(ChangeRealm.schema.name)
             .filtered('transactionId == $0', oid)
-            .sorted('start');
+            .sorted('beforeDetails.start');
 
         return results.map(this.mapChangeRealmToEntity);
     }

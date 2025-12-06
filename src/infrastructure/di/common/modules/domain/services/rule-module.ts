@@ -1,9 +1,11 @@
 import {Module} from "@nestjs/common";
 import {CardRule, EmailRule, PassportRule, PhoneRule, Rule, TinRule} from "domain/_processor/rules";
 import {Symbols} from "di/common";
+import {PinflRule} from "domain/_processor/rules/specific/pinfl-rule";
 
 @Module({
     providers: [
+        PinflRule,
         PhoneRule,
         EmailRule,
         CardRule,
@@ -13,15 +15,16 @@ import {Symbols} from "di/common";
         {
             provide: Symbols.domain.rules.common,
             useFactory: (
+                pinfl: PinflRule,
                 phone: PhoneRule,
                 email: EmailRule,
                 card: CardRule,
                 passport: PassportRule,
                 tin: TinRule,
             ): Rule[] => {
-                return [card, passport, tin, email, phone];
+                return [pinfl, card, passport, tin, email, phone];
             },
-            inject: [CardRule, PassportRule, TinRule, EmailRule, PhoneRule],
+            inject: [PinflRule, CardRule, PassportRule, TinRule, EmailRule, PhoneRule],
         },
     ],
     exports: [Symbols.domain.rules.common],

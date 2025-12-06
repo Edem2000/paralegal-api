@@ -3,13 +3,13 @@ import {allRuleKinds, RuleKind} from "domain/_processor/rules";
 import {MaskingMode} from "domain/_processor/processing-config/types";
 
 export interface ProcessingConfigService {
-    buildConfig(choices: RuleKind[], maskingMode: MaskingMode, customQueries: string[]): ProcessingConfig;
+    buildConfig(choices: RuleKind[], llmChoices: RuleKind[], maskingMode: MaskingMode, customQueries: string[]): ProcessingConfig;
 }
 
 export class ProcessingConfigServiceImpl implements ProcessingConfigService {
     private allRuleKinds: RuleKind[] = allRuleKinds;
 
-    buildConfig(choices: RuleKind[], maskingMode: MaskingMode, customQueries: string[]): ProcessingConfig {
+    buildConfig(choices: RuleKind[], llmChoices: RuleKind[], maskingMode: MaskingMode, customQueries: string[]): ProcessingConfig {
 
         const kinds: KindMaskConfig[] = this.allRuleKinds.map((kind) => ({
             kind,
@@ -17,8 +17,15 @@ export class ProcessingConfigServiceImpl implements ProcessingConfigService {
             maskingMode: maskingMode,
         }));
 
+        const llmKinds: KindMaskConfig[] = this.allRuleKinds.map((kind) => ({
+            kind,
+            enabled: llmChoices.includes(kind),
+            maskingMode: maskingMode,
+        }));
+
         return {
             kinds,
+            llmKinds,
             customQueries,
             maskingMode,
         };

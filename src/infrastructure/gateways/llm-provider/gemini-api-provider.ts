@@ -1,6 +1,6 @@
 import type {ProcessingConfig} from "domain/_processor/processing-config";
 import {Span, SpanModel} from "domain/span/span";
-import type {LlmProvider} from "domain/_processor";
+import type {LlmProvider, RunResult} from "domain/_processor";
 import {GoogleGenAI} from "@google/genai";
 import {systemPrompt} from "infrastructure/gateways/llm-provider/prompt";
 import {RunActor} from "domain/span/types";
@@ -11,14 +11,13 @@ export class GeminiApiProvider implements LlmProvider {
     //other options: "gemini-3-pro-preview"
 
     constructor(config: { geminiApiKey: string }) {
-        console.log("GeminiApiProvider", config);
-
         this.client = new GoogleGenAI({
             apiKey: config.geminiApiKey,
         });
     }
 
-    public async findMatches(inputText: string, config: ProcessingConfig): Promise<Span[]> {
+    public async findMatches(inputText: string, config: ProcessingConfig): Promise<RunResult> {
+        const startTime = Date.now();
         const response = await this.client.models.generateContent({
             model: this.model,
             contents: `text to process: ${inputText}; queries to search: ${config.customQueries.join(', ')}; maskingMode: ${config.maskingMode}`,
@@ -27,6 +26,9 @@ export class GeminiApiProvider implements LlmProvider {
                 systemInstruction: systemPrompt
             }
         });
+        const endTime = Date.now();
+        const timeTaken = endTime - startTime;
+
         const rawObjects = response.text ? this.parseResponse(response.text) : [];
 
         console.log(rawObjects);
@@ -34,7 +36,6 @@ export class GeminiApiProvider implements LlmProvider {
         const resultSpans: Span[] = [];
 
         rawObjects.forEach((value) => {
-            console.log(this.isValidSpan(value), value)
             if(this.isValidSpan(value)) {
                 const span = new Span({
                     ...value,
@@ -43,7 +44,7 @@ export class GeminiApiProvider implements LlmProvider {
                 resultSpans.push(span);
             }
         })
-        return resultSpans;
+        return { spans: resultSpans, stats: { timeTaken }};
     }
 
     private parseResponse(llmResponse: string): object[] {

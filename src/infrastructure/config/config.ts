@@ -13,14 +13,14 @@ type GeneralConfig = {
   llm: {
       provider: LlmProviderOption,
       geminiApiKey: string,
-
+      openaiApiKey: string,
   }
 };
 
 export const LlmProviderOption = {
     Local: "local",
     Gemini: "gemini",
-    // OpenAI: "openai",
+    OpenAI: "openai",
 } as const;
 
 export type LlmProviderOption = (typeof LlmProviderOption)[keyof typeof LlmProviderOption];
@@ -48,5 +48,6 @@ export const config: GeneralConfig = {
   llm: {
       provider: envVars.LLM_PROVIDER as LlmProviderOption || LlmProviderOption.Local,
       geminiApiKey: envVars.GEMINI_API_KEY || "",
+      openaiApiKey: envVars.OPENAI_API_KEY || "",
   }
 };

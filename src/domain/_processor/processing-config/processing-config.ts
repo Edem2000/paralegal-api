@@ -9,6 +9,7 @@ export interface KindMaskConfig {
 
 export interface ProcessingConfig {
     kinds: KindMaskConfig[],
+    llmKinds: KindMaskConfig[],
     customQueries: string[],
     maskingMode: MaskingMode,
 }
