@@ -4,6 +4,7 @@ import {EntityId, Identifier} from "domain/_core";
 export class TransactionRealm extends Realm.Object<TransactionRealm> {
     _id!: BSON.ObjectId;
     choices!: string[];
+    llmChoices!: string[];
     customQueries!: string[];
 
     inputText!: string;
@@ -30,6 +31,7 @@ export class TransactionRealm extends Realm.Object<TransactionRealm> {
         properties: {
             _id: 'objectId',
             choices: 'string[]',
+            llmChoices: 'string[]',
             customQueries: 'string[]',
 
             inputText: 'string',

@@ -39,6 +39,7 @@ export class ProcessTransactionUsecaseImpl implements ProcessTransactionUsecase 
         const transaction = this.transactionService.create({
             inputText: input,
             choices,
+            llmChoices,
             customQueries,
         });
 

@@ -3,6 +3,7 @@ import {TransactionStatus} from "domain/transaction/transaction-state";
 
 export interface TransactionModel extends BaseModel {
     choices: string[],
+    llmChoices: string[],
     customQueries: string[],
 
     inputText: string,
@@ -23,6 +24,14 @@ export class Transaction extends BaseEntity<TransactionModel> {
 
     public set choices(value: string[]) {
         this.model.choices = value;
+    }
+
+    public get llmChoices(): string[] {
+        return this.model.llmChoices;
+    }
+
+    public set llmChoices(value: string[]) {
+        this.model.llmChoices = value;
     }
 
     public get customQueries(): string[] {

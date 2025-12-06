@@ -6,6 +6,7 @@ export class TransactionPresenter {
         return {
             id: transaction.id.toString(),
             choices: transaction.choices,
+            llmChoices: transaction.llmChoices,
             customQueries: transaction.customQueries,
             inputText: transaction.inputText,
             finalText: transaction.finalText!,
@@ -22,6 +23,7 @@ export class TransactionPresenter {
 export type TransactionResponseDto = {
     id: HexString;
     choices: string[],
+    llmChoices: string[],
     customQueries: string[],
     inputText: string,
     finalText: string,
