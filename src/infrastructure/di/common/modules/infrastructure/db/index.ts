@@ -1,1 +1,1 @@
-export * from "./mongo-module"
+export * from "./realm-module"
